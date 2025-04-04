@@ -9,7 +9,6 @@ BLACK = (0, 0, 0)
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 FRAMES_PER_SECOND = 30
-BALL_SIDE = 100
 N_PIXELS_PER_FRAME = 3
 
 # 3 - Initialize the world
@@ -19,12 +18,16 @@ clock = pygame.time.Clock()
 
 # 4 - Load assets: image(s), sound(s),  etc.
 ballImage = pygame.image.load('images/ball.png')
+bounceSound = pygame.mixer.Sound('sound/boing.wav')
+pygame.mixer.music.load('sound/background.mp3')
+pygame.mixer.music.play(-1, 0.0)
 
 # 5 - Initialize variables
-MAX_WIDTH = WINDOW_WIDTH - BALL_SIDE
-MAX_HEIGHT = WINDOW_HEIGHT - BALL_SIDE
-ballX = random.randrange(MAX_WIDTH)
-ballY = random.randrange(MAX_HEIGHT)
+ballRect = ballImage.get_rect()
+MAX_WIDTH = WINDOW_WIDTH - ballRect.width
+MAX_HEIGHT = WINDOW_HEIGHT - ballRect.height
+ballRect.left = random.randrange(MAX_WIDTH)
+ballRect.top = random.randrange(MAX_WIDTH)
 xSpeed = N_PIXELS_PER_FRAME
 ySpeed = N_PIXELS_PER_FRAME
 
@@ -40,20 +43,21 @@ while True:
 
     # 8 - Do any "per frame" actions
 
-    if (ballX < 0) or (ballX >= MAX_WIDTH):
+    if (ballRect.left < 0) or (ballRect.right >= WINDOW_WIDTH):
         xSpeed = -xSpeed
+        bounceSound.play()
 
-    if (ballY < 0) or (ballY >= MAX_HEIGHT):
+    if (ballRect.top < 0) or (ballRect.bottom >= WINDOW_HEIGHT):
         ySpeed = -ySpeed
-
-    ballX = ballX + xSpeed
-    ballY = ballY + ySpeed
+        bounceSound.play()
+    ballRect.left = ballRect.left + xSpeed
+    ballRect.top = ballRect.top + ySpeed
 
     # 9 - Clear the window
     window.fill(BLACK)
 
     # 10 - Draw all window elements
-    window.blit(ballImage, (ballX, ballY))  # draw the ball
+    window.blit(ballImage, ballRect)  # draw the ball
 
     # 11 - Update the window
     pygame.display.update()
