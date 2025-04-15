@@ -1,3 +1,3 @@
-N_BALLOONS = 30
+N_BALLOONS = 5
 BALLOON_MISSED = 'Missed'
 BALLOON_MOVING = 'Balloon Moving'

@@ -19,10 +19,12 @@ class BalloonMgr():
         self.score = 0
 
         for balloonNum in range(0, N_BALLOONS):
-            randomBalloonClass = random.choice((BalloonSmall,
-                                                BalloonMedium,
-                                                BalloonLarge,
-                                                BalloonMega))
+            randomBalloonClassList = random.choices((BalloonSmall,
+                                                    BalloonMedium,
+                                                    BalloonLarge,
+                                                    BalloonMega),
+                                                    weights=[5,5,5,3])
+            randomBalloonClass = randomBalloonClassList[0]
             oBalloon = randomBalloonClass(self.window, self.maxWidth,
                                           self.maxHeight, balloonNum)
             self.balloonList.append(oBalloon)
