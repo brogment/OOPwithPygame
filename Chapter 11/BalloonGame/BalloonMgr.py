@@ -32,10 +32,13 @@ class BalloonMgr():
             for oBalloon in reversed(self.balloonList):
                 wasHit, nPoints = oBalloon.clickedInside(event.pos)
                 if wasHit:
-                    if nPoints > 0:
+                    health = oBalloon.getHealth() - 1
+                    if health <= 0:
                         self.balloonList.remove(oBalloon)
                         self.nPopped += 1
                         self.score += nPoints
+                    else:
+                        oBalloon.setHealth(health)
                     return
 
     def update(self):

@@ -11,13 +11,14 @@ class Balloon(ABC):
 
     @abstractmethod
     def __init__(self, window, maxWidth, maxHeight, ID,
-                 oImage, size, nPoints, speedY):
+                 oImage, size, nPoints, speedY, health=1):
         self.window = window
         self.ID = ID
         self.balloonImage = oImage
         self.size = size
         self.nPoints = nPoints
         self.speedY = speedY
+        self.health = health
 
         if not Balloon.popSoundLoaded:
             Balloon.popSoundLoaded = True
@@ -49,6 +50,12 @@ class Balloon(ABC):
 
     def draw(self):
         self.balloonImage.draw()
+
+    def setHealth(self, health):
+        self.health = health
+
+    def getHealth(self):
+        return self.health
 
     def __del__(self):
         print(self.size, 'Balloon', self.ID, 'is going away')
@@ -83,4 +90,4 @@ class BalloonMega(Balloon):
     def __init__(self, window, maxWidth, maxHeight, ID):
         oImage = pygwidgets.Image(window, (0,0), BalloonMega.balloonImage)
         super().__init__(window, maxWidth, maxHeight, ID,
-                         oImage, 'Mega', 15, 1.8)
+                         oImage, 'Mega', 15, 1.8, 3)

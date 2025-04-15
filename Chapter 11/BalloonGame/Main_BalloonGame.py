@@ -27,12 +27,15 @@ clock = pygame.time.Clock()
 oScoreDisplay = pygwidgets.DisplayText(window, (10, USABLE_WINDOW_HEIGHT + 25),
                                        'Score: 0', textColor=BLACK,
                                        backgroundColor=None, width=140, fontSize=24)
-oStatusDisplay = pygwidgets.DisplayText(window, (180, USABLE_WINDOW_HEIGHT + 25),
+oStatusDisplay = pygwidgets.DisplayText(window, (150, USABLE_WINDOW_HEIGHT + 25),
                                        '', textColor=BLACK, backgroundColor=None,
                                         width=300, fontSize=24)
 oStartButton = pygwidgets.TextButton(window,
                                      (WINDOW_WIDTH - 110, USABLE_WINDOW_HEIGHT + 10),
                                      'Start')
+oStopButton = pygwidgets.TextButton(window,
+                                    (WINDOW_WIDTH - 230, USABLE_WINDOW_HEIGHT + 10),
+                                    'Stop')
 # 5 - Initialize variables
 oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT)
 playing = False
@@ -52,6 +55,11 @@ while True:
             oBalloonMgr.handleEvent(event)
             theScore = oBalloonMgr.getScore()
             oScoreDisplay.setValue('Score: ' + str(theScore))
+
+            if oStopButton.handleEvent(event):
+                playing = False
+                oStartButton.enable()
+
         elif oStartButton.handleEvent(event):
             oBalloonMgr.start()
             oScoreDisplay.setValue('Score: 0')
@@ -80,6 +88,7 @@ while True:
     oScoreDisplay.draw()
     oStatusDisplay.draw()
     oStartButton.draw()
+    oStopButton.draw()
 
     # 11 - Update the window
     pygame.display.update()
