@@ -61,7 +61,8 @@ while True:
                 oStartButton.enable()
 
         elif oStartButton.handleEvent(event):
-            oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT)
+            speedModifier = 1
+            oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT, speedModifier)
             oBalloonMgr.start()
             oScoreDisplay.setValue('Score: 0')
             playing = True
@@ -77,7 +78,8 @@ while True:
                                 '   Out of: ' + str(N_BALLOONS))
         if (nPopped + nMissed) == N_BALLOONS:
             if nPopped == N_BALLOONS:
-                oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT)
+                speedModifier *= 1.1
+                oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT, speedModifier)
                 oBalloonMgr.start()
                 oScoreDisplay.setValue('Score: 0')
             else:

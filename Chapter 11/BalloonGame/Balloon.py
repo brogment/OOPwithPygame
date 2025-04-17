@@ -11,14 +11,15 @@ class Balloon(ABC):
 
     @abstractmethod
     def __init__(self, window, maxWidth, maxHeight, ID,
-                 oImage, size, nPoints, speedY, health=1):
+                 oImage, size, nPoints, speedY, speedModifier, health=1):
         self.window = window
         self.ID = ID
         self.balloonImage = oImage
         self.size = size
         self.nPoints = nPoints
-        self.speedY = speedY
+        self.speedY = speedY * speedModifier
         self.health = health
+
 
         if not Balloon.popSoundLoaded:
             Balloon.popSoundLoaded = True
@@ -63,31 +64,31 @@ class Balloon(ABC):
 class BalloonSmall(Balloon):
     balloonImage = pygame.image.load('images/redBalloonSmall.png')
 
-    def __init__(self, window, maxWidth, maxHeight, ID):
+    def __init__(self, window, maxWidth, maxHeight, ID, speedModifier):
         oImage = pygwidgets.Image(window, (0,0), BalloonSmall.balloonImage)
         super().__init__(window, maxWidth, maxHeight, ID,
-                         oImage, 'Small', 30, 3.1)
+                         oImage, 'Small', 30, 3.1, speedModifier)
 
 class BalloonMedium(Balloon):
     balloonImage = pygame.image.load('images/redBalloonMedium.png')
 
-    def __init__(self, window, maxWidth, maxHeight, ID):
+    def __init__(self, window, maxWidth, maxHeight, ID, speedModifier):
         oImage = pygwidgets.Image(window, (0,0), BalloonMedium.balloonImage)
         super().__init__(window, maxWidth, maxHeight, ID,
-                         oImage, 'Medium', 20, 2.2)
+                         oImage, 'Medium', 20, 2.2, speedModifier)
 
 class BalloonLarge(Balloon):
     balloonImage = pygame.image.load('images/redBalloonLarge.png')
 
-    def __init__(self, window, maxWidth, maxHeight, ID):
+    def __init__(self, window, maxWidth, maxHeight, ID, speedModifier):
         oImage = pygwidgets.Image(window, (0,0), BalloonLarge.balloonImage)
         super().__init__(window, maxWidth, maxHeight, ID,
-                         oImage, 'Large', 10, 1.5)
+                         oImage, 'Large', 10, 1.5, speedModifier)
 
 class BalloonMega(Balloon):
     balloonImage = pygame.image.load('images/megaBalloon.png')
 
-    def __init__(self, window, maxWidth, maxHeight, ID):
+    def __init__(self, window, maxWidth, maxHeight, ID, speedModifier):
         oImage = pygwidgets.Image(window, (0,0), BalloonMega.balloonImage)
         super().__init__(window, maxWidth, maxHeight, ID,
-                         oImage, 'Mega', 15, 1.8, 3)
+                         oImage, 'Mega', 15, 1.8, speedModifier, 3)
