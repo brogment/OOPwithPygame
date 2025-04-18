@@ -10,13 +10,16 @@ class BalloonMgr():
         self.window = window
         self.maxWidth = maxWidth
         self.maxHeight = maxHeight
+
+        self.score = 0
+        self.level = 1
+
         print(self.__dict__)
 
     def start(self, speedModifier, nBalloons):
         self.balloonList = []
         self.nPopped = 0
         self.nMissed = 0
-        self.score = 0
         self.speedModifier = speedModifier
         self.nBalloons = nBalloons
 
@@ -54,6 +57,15 @@ class BalloonMgr():
 
     def getScore(self):
         return self.score
+
+    def setScore(self, score):
+        self.score = score
+
+    def getLevel(self):
+        return self.level
+
+    def setLevel(self, level):
+        self.level = level
 
     def getCountPopped(self):
         return self.nPopped

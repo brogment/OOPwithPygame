@@ -12,8 +12,9 @@ from BalloonMgr import *
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
 BACKGROUND_COLOR = (0, 180, 180)
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 640
+YELLOW = (139, 128, 0)
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
 PANEL_HEIGHT = 60
 USABLE_WINDOW_HEIGHT = WINDOW_HEIGHT - PANEL_HEIGHT
 FRAMES_PER_SECOND = 30
@@ -27,6 +28,10 @@ clock = pygame.time.Clock()
 oScoreDisplay = pygwidgets.DisplayText(window, (10, USABLE_WINDOW_HEIGHT + 25),
                                        'Score: 0', textColor=BLACK,
                                        backgroundColor=None, width=140, fontSize=24)
+
+oLevelDisplay = pygwidgets.DisplayText(window, (10, 10), '', textColor=YELLOW,
+                                       backgroundColor=None, fontSize=30)
+
 oStatusDisplay = pygwidgets.DisplayText(window, (150, USABLE_WINDOW_HEIGHT + 25),
                                        '', textColor=BLACK, backgroundColor=None,
                                         width=300, fontSize=24)
@@ -66,7 +71,10 @@ while True:
 
             oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT)
             oBalloonMgr.start(speedModifier, nBalloons)
+            oBalloonMgr.setScore(0)
             oScoreDisplay.setValue('Score: 0')
+            oBalloonMgr.setLevel(1)
+            oLevelDisplay.setValue('LEVEL 1')
             playing = True
             oStartButton.disable()
 
@@ -82,7 +90,9 @@ while True:
             if nPopped == nBalloons:
                 speedModifier *= 1.1
                 oBalloonMgr.start(speedModifier, nBalloons)
-                oScoreDisplay.setValue('Score: 0')
+                theLevel = oBalloonMgr.getLevel() + 1
+                oBalloonMgr.setLevel(theLevel)
+                oLevelDisplay.setValue('LEVEL ' + str(theLevel))
             else:
                 playing = False
                 oStartButton.enable()
@@ -99,6 +109,7 @@ while True:
     oStatusDisplay.draw()
     oStartButton.draw()
     oStopButton.draw()
+    oLevelDisplay.draw()
 
     # 11 - Update the window
     pygame.display.update()
