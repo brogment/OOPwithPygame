@@ -6,20 +6,21 @@ from BalloonConstants import *
 from Balloon import *
 
 class BalloonMgr():
-    def __init__(self, window, maxWidth, maxHeight, speedModifier):
+    def __init__(self, window, maxWidth, maxHeight):
         self.window = window
         self.maxWidth = maxWidth
         self.maxHeight = maxHeight
-        self.speedModifier = speedModifier
         print(self.__dict__)
 
-    def start(self):
+    def start(self, speedModifier, nBalloons):
         self.balloonList = []
         self.nPopped = 0
         self.nMissed = 0
         self.score = 0
+        self.speedModifier = speedModifier
+        self.nBalloons = nBalloons
 
-        for balloonNum in range(0, N_BALLOONS):
+        for balloonNum in range(0, self.nBalloons):
             randomBalloonClassList = random.choices((BalloonSmall,
                                                     BalloonMedium,
                                                     BalloonLarge,

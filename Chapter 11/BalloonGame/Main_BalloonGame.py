@@ -39,6 +39,8 @@ oStopButton = pygwidgets.TextButton(window,
 # 5 - Initialize variables
 
 playing = False
+speedModifier = 1
+nBalloons = 8
 
 # 6 - Loop forever
 while True:
@@ -52,7 +54,7 @@ while True:
             sys.exit()
 
         if playing:
-            oBalloonMgr.handleEvent(event) # ignore, this can't currently be reached
+            oBalloonMgr.handleEvent(event)
             theScore = oBalloonMgr.getScore()
             oScoreDisplay.setValue('Score: ' + str(theScore))
 
@@ -61,9 +63,9 @@ while True:
                 oStartButton.enable()
 
         elif oStartButton.handleEvent(event):
-            speedModifier = 1
-            oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT, speedModifier)
-            oBalloonMgr.start()
+
+            oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT)
+            oBalloonMgr.start(speedModifier, nBalloons)
             oScoreDisplay.setValue('Score: 0')
             playing = True
             oStartButton.disable()
@@ -75,16 +77,16 @@ while True:
         nMissed = oBalloonMgr.getCountMissed()
         oStatusDisplay.setValue('Popped: ' + str(nPopped) +
                                 '   Missed: ' + str(nMissed) +
-                                '   Out of: ' + str(N_BALLOONS))
-        if (nPopped + nMissed) == N_BALLOONS:
-            if nPopped == N_BALLOONS:
+                                '   Out of: ' + str(nBalloons))
+        if (nPopped + nMissed) == nBalloons:
+            if nPopped == nBalloons:
                 speedModifier *= 1.1
-                oBalloonMgr = BalloonMgr(window, WINDOW_WIDTH, USABLE_WINDOW_HEIGHT, speedModifier)
-                oBalloonMgr.start()
+                oBalloonMgr.start(speedModifier, nBalloons)
                 oScoreDisplay.setValue('Score: 0')
             else:
                 playing = False
                 oStartButton.enable()
+                speedModifier = 1
     # 9 - Clear the window
     window.fill(BACKGROUND_COLOR)
 
