@@ -11,11 +11,11 @@ class Deck():
         self.startingDeckList = []
         self.playingDeckList = []
         for suit in Deck.SUIT_TUPLE:
-            for rank, value in Deck.STANDARD_DICT:
+            for rank, value in rankValueDict.items():
                 oCard = Card(window, rank, suit, value)
                 self.startingDeckList.append(oCard)
 
-        self.shuffle
+        self.shuffle()
 
     def shuffle(self):
         self.playingDeckList = self.startingDeckList.copy()
@@ -31,3 +31,17 @@ class Deck():
 
     def returnCardToDeck(self, oCard):
         self.playingDeckList.insert(0, oCard)
+
+if __name__ == '__main__':
+    import pygame
+
+    WINDOW_WIDTH = 100
+    WINDOW_HEIGHT = 100
+
+    pygame.init()
+
+    window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+    oDeck = Deck(window)
+    for i in range(1, 53):
+        oCard = oDeck.getCard()
+        print(f'Index: {i} Name: {oCard.getName()} Value: {oCard.getValue()}')

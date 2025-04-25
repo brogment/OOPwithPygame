@@ -5,6 +5,7 @@ from pygame.locals import *
 import sys
 from Deck import *
 from Constants import *
+from Game import *
 
 # 2 - Define constants
 BLACK = (0, 0, 0)
@@ -29,7 +30,7 @@ quitButton = pygwidgets.TextButton(window, (880, 530), 'Quit',
                                       width=100, height=45)
 
 # 5 - Initialize variables
-oGame = Game
+oGame = Game(window)
 
 # 6 - Loop forever
 while True:
