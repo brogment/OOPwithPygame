@@ -22,9 +22,9 @@ clock = pygame.time.Clock()
 background = pygwidgets.Image(window, (0,0), 'images/background.png')
 newGameButton = pygwidgets.TextButton(window, (20, 530), 'New Game',
                                       width=100, height=45)
-higherButton = pygwidgets.TextButton(window, (540, 520), 'Higher',
+stayButton = pygwidgets.TextButton(window, (540, 520), 'Stay',
                                       width=120, height=55)
-lowerButton = pygwidgets.TextButton(window, (340, 520), 'Lower',
+hitButton = pygwidgets.TextButton(window, (340, 520), 'Hit',
                                       width=120, height=55)
 quitButton = pygwidgets.TextButton(window, (880, 530), 'Quit',
                                       width=100, height=45)
@@ -46,20 +46,24 @@ while True:
 
         if newGameButton.handleEvent(event):
             oGame.reset()
-            lowerButton.enable()
-            higherButton.enable()
-
-        if higherButton.handleEvent(event):
-            gameOver = oGame.hitHigherOrLower(HIGHER)
-            if gameOver:
-                higherButton.disable()
-                lowerButton.disable()
-
-        if lowerButton.handleEvent(event):
-            gameOver = oGame.hitHigherOrLower(LOWER)
-            if gameOver:
-                higherButton.disable()
-                lowerButton.disable()
+            hitButton.enable()
+            stayButton.enable()
+        
+        if hitButton.handleEvent(event):
+            oGame.hit()
+        
+        # if stayButton.handleEvent(event):
+        #     gameOver = oGame.hitHigherOrLower(HIGHER)
+        #     if gameOver:
+        #         stayButton.disable()
+        #         hitButton.disable()
+        # 
+        # if hitButton.handleEvent(event):
+        #     gameOver = oGame.hitHigherOrLower(LOWER)
+        #     if gameOver:
+        #         stayButton.disable()
+        #         hitButton.disable()
+                
     # 8 - Do any "per frame" actions
 
     # 9 - Clear the window before drawing it again
@@ -70,8 +74,8 @@ while True:
     oGame.draw()
     # Draw remaining UI elements
     newGameButton.draw()
-    lowerButton.draw()
-    higherButton.draw()
+    hitButton.draw()
+    stayButton.draw()
     quitButton.draw()
 
     # 11 - Update the window
