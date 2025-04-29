@@ -9,6 +9,7 @@ from Game import *
 
 # 2 - Define constants
 BLACK = (0, 0, 0)
+BACKGROUND_COLOR = (6,64,43)
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 600
 FRAMES_PER_SECOND = 30
@@ -50,24 +51,20 @@ while True:
             stayButton.enable()
         
         if hitButton.handleEvent(event):
-            oGame.hit()
-        
-        # if stayButton.handleEvent(event):
-        #     gameOver = oGame.hitHigherOrLower(HIGHER)
-        #     if gameOver:
-        #         stayButton.disable()
-        #         hitButton.disable()
-        # 
-        # if hitButton.handleEvent(event):
-        #     gameOver = oGame.hitHigherOrLower(LOWER)
-        #     if gameOver:
-        #         stayButton.disable()
-        #         hitButton.disable()
+            bust = oGame.hit()
+            if bust:
+                stayButton.disable()
+                hitButton.disable()
+
+        if stayButton.handleEvent(event):
+            stayButton.disable()
+            hitButton.disable()
+
                 
     # 8 - Do any "per frame" actions
 
     # 9 - Clear the window before drawing it again
-    background.draw()
+    window.fill(BACKGROUND_COLOR)
 
     # 10 - Draw all window elements
     # Tell the game to draw itself

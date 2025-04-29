@@ -7,13 +7,14 @@ from Card import *
 
 class Game():
     CARD_OFFSET = 70
-    CARDS_TOP = 300
     CARDS_LEFT = 300
+    PLAYER_CARDS_TOP = 300
+    DEALER_CARDS_TOP = 100
     NCARDS = 2
 
     def __init__(self, window):
         self.window = window
-        self.oDeck = Deck(self.window)
+        self.oDeck = Deck(self.window,rankValueDict=Deck.blackjackDict)
         self.messageText = pygwidgets.DisplayText(window, (50, 460),
                                     '', width=900, justified='center',
                                     fontSize=36, textColor=WHITE)
@@ -22,6 +23,19 @@ class Game():
         self.winnerSound = pygame.mixer.Sound("sounds/ding.wav")
         self.cardShuffleSound = pygame.mixer.Sound("sounds/cardShuffle.wav")
 
+        self.reset()  # start a round of the game
+
+    def reset(self):  # this method is called when a new round starts
+
+        self.oDeck.shuffle()
+        self.cardShuffleSound.play()
+
+        self.playerCardList = []
+        self.playerScore = 0
+
+        self.dealerCardList = []
+        self.dealerScore = 0
+
         self.cardXPositionsList = []
         self.thisLeft = Game.CARDS_LEFT
         # Calculate the x positions of first two cards
@@ -29,46 +43,54 @@ class Game():
             self.cardXPositionsList.append(self.thisLeft)
             self.thisLeft = self.thisLeft + Game.CARD_OFFSET
 
-        self.reset()  # start a round of the game
-
-    def reset(self):  # this method is called when a new round starts
-
-        self.score = 0
-        self.cardShuffleSound.play()
-        self.cardList = []
-        self.oDeck.shuffle()
-        for cardIndex in range(0, Game.NCARDS):  # deal out cards to player
+        for cardIndex in range(0, Game.NCARDS):  # deal out cards to player and dealer
             oCard = self.oDeck.getCard()
-            self.cardList.append(oCard)
-            self.score += oCard.getValue()
+            self.playerCardList.append(oCard)
+            self.playerScore += oCard.getValue()
+
+            aCard = self.oDeck.getCard()
+            self.dealerCardList.append(aCard)
+            self.dealerScore += aCard.getValue()
 
             thisXPosition = self.cardXPositionsList[cardIndex]
-            oCard.setLoc((thisXPosition, Game.CARDS_TOP))
+            oCard.setLoc((thisXPosition, Game.PLAYER_CARDS_TOP))
+            aCard.setLoc((thisXPosition, Game.DEALER_CARDS_TOP))
 
-        self.showCard(0)
-        self.showCard(1)
-        print(self.score)
+
+        self.showCard(0,self.playerCardList)
+        self.showCard(1,self.playerCardList)
+        self.showCard(0, self.dealerCardList)
+        print(self.playerScore)
 
         self.messageText.setValue('Hit or stay?')
 
     def getCardNameAndValue(self, index):
-        oCard = self.cardList[index]
+        oCard = self.playerCardList[index]
         theName = oCard.getName()
         theValue = oCard.getValue()
         return theName, theValue
 
-    def showCard(self, index):
-        oCard = self.cardList[index]
+    def showCard(self, index, cardList):
+        oCard = cardList[index]
         oCard.reveal()
+
     def hit(self):
         oCard = self.oDeck.getCard()
-        self.cardList.append(oCard)
+        oCard.reveal()
 
+        self.playerCardList.append(oCard)
         self.cardXPositionsList.append(self.thisLeft)
         self.thisLeft = self.thisLeft + Game.CARD_OFFSET
 
         thisXPosition = self.cardXPositionsList[-1]
-        oCard.setLoc((thisXPosition, Game.CARDS_TOP))
+        oCard.setLoc((thisXPosition, Game.PLAYER_CARDS_TOP))
+
+        self.playerScore += oCard.getValue()
+        print(self.playerScore)
+        if self.playerScore > 21:
+            return True
+        else:
+            return False
 
     # def hitHigherOrLower(self, higherOrLower):
     #     self.cardNumber += 1
@@ -97,7 +119,10 @@ class Game():
 
     def draw(self):
         # Tell for each card to draw itself
-        for oCard in self.cardList:
+        for oCard in self.playerCardList:
             oCard.draw()
+
+        for aCard in self.dealerCardList:
+            aCard.draw()
 
         self.messageText.draw()
