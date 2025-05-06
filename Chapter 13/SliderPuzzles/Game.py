@@ -1,3 +1,5 @@
+import pygame.mixer
+
 from Square import *
 import random
 
@@ -46,3 +48,89 @@ class Game():
         self.squaresList = []
         for row in range(0,4):
             xPos = Game.START_LEFT
+
+        # create list of square objects
+        for row in range(0,4):
+            xPos = Game.START_LEFT
+            for col in range(0,4):
+                squareNumber = (row * 4) + col
+                legalMovesTuple = LEGAL_MOVES_DICT[squareNumber]
+                oSquare = Square(self.window, xPos, yPos, squareNumber, legalMovesTuple)
+                self.squaresList.append(oSquare)
+                xPos += SQUARE_WIDTH
+            yPos += SQUARE_HEIGHT
+
+        self.soundTick = pygame.mixer.Sound('sounds/tick.wav')
+        self.soundApplause = pygame.mixer.Sound('sounds/applause.wav')
+        self.soundNope = pygame.mixer.Sound('sounds/nope.wav')
+
+        self.playing = False
+        self.startNewGame();
+
+    def startNewGame(self):
+        # Tell all squares to reset themselves
+        for oSquare in self.squaresList:
+            oSquare.reset();
+
+        self.oOpenSquare = self.squaresList[STARTING_OPEN_SQUARE_NUMBER]
+
+        # make 200 arbitrary moves to randomize
+        for i in range(0, 200):
+            legalMovesForThisTile = self.oOpenSquare.getLegalMoves()
+            nextMoveNumber = random.choice(legalMovesForThisTile)
+            oSquare = self.squaresList[nextMoveNumber]
+
+            # switch randomly chosen square and open square
+            self.switch(oSquare, playMoveSound=False)
+
+        self.playing = True
+
+    def gotClick(self, clickLoc):
+        if not self.playing:
+            return # game is over, waiting for restart button
+
+        for oSquare in self.squaresList:
+            if oSquare.clickedInside(clickLoc):
+                squareNumber = oSquare.getSquareNumber()
+                legalMovesForOpenSquareTuple = self.oOpenSquare.getLegalMoves()
+                legalMove = squareNumber in legalMovesForOpenSquareTuple
+
+                if legalMove:
+                    self.switch(oSquare, playMoveSound=True)
+                else: # illegal move aka not next to open space
+                    self.soundNope.play()
+                return
+
+    # switch the tile of a given square with the open square
+    def switch(self, oSquareToSwitch, playMoveSound=False):
+        oSquareToSwitch.switch(self.oOpenSquare)
+        # re-assign the open square
+        self.oOpenSquare = oSquareToSwitch
+        if playMoveSound:
+            self.soundTick.play()
+
+    def checkForWin(self):
+        if not self.playing:
+            return False
+
+        for oSquare in self.squaresList:
+            if not oSquare.isTileInProperPlace():
+                return False
+
+        # all in proper place, game over
+        self.playing = False
+        self.soundApplause.play()
+
+        return True
+
+    def getGamePlaying(self):
+        return self.playing
+
+    def stopPlaying(self):
+        self.playing = False
+
+    def draw(self):
+        for oSquare in self.squaresList:
+            oSquare.draw()
+
+
