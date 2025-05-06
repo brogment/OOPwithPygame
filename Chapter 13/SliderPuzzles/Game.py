@@ -44,10 +44,7 @@ class Game():
             15:(11, 14)}
 
         yPos = Game.START_TOP
-
         self.squaresList = []
-        for row in range(0,4):
-            xPos = Game.START_LEFT
 
         # create list of square objects
         for row in range(0,4):
