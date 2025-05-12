@@ -1,20 +1,40 @@
 import pygame
 import time
 
-class SimpleAnimation():
-    def __init__(self, window, loc, picPaths, durationPerImage):
+class SimpleSpriteSheetAnimation():
+    def __init__(self, window, loc, imagePath, nImages, width, height, durationPerImage):
         self.window = window
         self.loc = loc
+        self.nImages = nImages
         self.imagesList = []
-        for picPath in picPaths:
-            image = pygame.image.load(picPath) # load an image
-            image = pygame.Surface.convert_alpha(image) # optimize blitting
-            self.imagesList.append(image)
-
         self.playing = False
         self.durationPerImage = durationPerImage
-        self.nImages = len(self.imagesList)
         self.index = 0
+
+        # load the sprite sheet
+        spriteSheetImage = pygame.image.load(imagePath)
+        # optimize blitting
+        spriteSheetImage = pygame.Surface.convert_alpha(spriteSheetImage)
+
+        # calculate number of columns in sheet
+        nCols = spriteSheetImage.get_width() // width
+
+        # break up starting image into individual images
+        row = 0
+        col = 0
+        for image in range(nImages):
+            x = col * height
+            y = row * width
+
+            # create a subsurface from the bigger sprite sheet
+            subsurfaceRect = pygame.Rect(x, y, width, height)
+            image = spriteSheetImage.subsurface(subsurfaceRect)
+            self.imagesList.append(image)
+
+            col += 1
+            if col == nCols:
+                col = 0
+                row += 1
 
     def play(self):
         if self.playing:
