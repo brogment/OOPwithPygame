@@ -92,6 +92,13 @@ class Game():
         else:
             return False
 
+    # TODO: implement dealer turn, refactor hit and create stay method
+    def dealerTurn(self):
+        if self.dealerScore <= 16:
+            self.hit()
+        else
+            self.stay()
+
     # def hitHigherOrLower(self, higherOrLower):
     #     self.cardNumber += 1
     #     self.showCard(self.cardNumber)
