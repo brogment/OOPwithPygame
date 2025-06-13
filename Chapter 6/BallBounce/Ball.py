@@ -4,10 +4,11 @@ import random
 
 class Ball():
 
-    def __init__(self, window, windowWidth, windowHeight):
+    def __init__(self, window, windowWidth, windowHeight, ID):
         self.window = window
         self.windowHeight = windowHeight
         self.windowWidth = windowWidth
+        self.ID = ID
 
         self.image = pygame.image.load('images/ball.png')
         self.bounceSound = pygame.mixer.Sound('sound/boing.wav')
@@ -28,15 +29,15 @@ class Ball():
         self.xSpeed = random.choice(speedsList)
         self.ySpeed = random.choice(speedsList)
 
-    def update(self):
-        # can I pass the entire ball list?
-        # The ball rects are just 0, 0, 100, 100, it's not updating based on location
+    def update(self, ballList):
+
+        # checking to see if this ball is colliding with any other balls
         # for oBall in ballList:
-           # if self.ballRect.colliderect(oBall.ballRect):
-                # print(self.ballRect)
-                # self.xSpeed = -self.xSpeed
-                # self.ySpeed = -self.ySpeed
-                # self.bounceSound.play()
+        #    if self.ballRect.colliderect(oBall.ballRect):
+        #         print(self.ballRect)
+        #         self.xSpeed = -self.xSpeed
+        #         self.ySpeed = -self.ySpeed
+        #         self.bounceSound.play()
 
         # Check for hitting a wall. If so, change that direction.
         if (self.x < 0) or (self.x >= self.maxWidth):

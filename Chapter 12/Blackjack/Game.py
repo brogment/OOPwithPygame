@@ -96,7 +96,7 @@ class Game():
     def dealerTurn(self):
         if self.dealerScore <= 16:
             self.hit()
-        else
+        else:
             self.stay()
 
     # def hitHigherOrLower(self, higherOrLower):
