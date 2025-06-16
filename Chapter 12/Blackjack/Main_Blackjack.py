@@ -18,8 +18,8 @@ window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 # 5 - Initialize variables
 
 scenesList = [SceneStart(window),
-              ScenePlay(window)]#,
-    #           SceneResults(window)]
+              ScenePlay(window),
+              SceneResults(window)]
 
 # pass in sceneList and FPS to frame manager
 oSceneMgr = pyghelpers.SceneMgr(scenesList, FRAMES_PER_SECOND)

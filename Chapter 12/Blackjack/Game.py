@@ -4,12 +4,13 @@ import pygwidgets
 from Constants import *
 from Deck import *
 from Card import *
+from Player import *
 
 class Game():
     CARD_OFFSET = 70
     CARDS_LEFT = 300
-    PLAYER_CARDS_TOP = 300
-    DEALER_CARDS_TOP = 100
+    # PLAYER_CARDS_TOP = 300
+    # DEALER_CARDS_TOP = 100
     NCARDS = 2
 
     def __init__(self, window):
@@ -30,42 +31,29 @@ class Game():
         self.oDeck.shuffle()
         self.cardShuffleSound.play()
 
-        self.playerCardList = []
-        self.playerScore = 0
+        self.playerList=[]
 
-        self.dealerCardList = []
-        self.dealerScore = 0
+        self.oPlayer1 = Player(300)
+        self.oPlayer2 = Player(100)
+        self.playerList.append(self.oPlayer1)
+        self.playerList.append(self.oPlayer2)
 
-        self.cardXPositionsList = []
-        self.thisLeft = Game.CARDS_LEFT
-        # Calculate the x positions of first two cards
-        for cardNum in range(Game.NCARDS):
-            self.cardXPositionsList.append(self.thisLeft)
-            self.thisLeft = self.thisLeft + Game.CARD_OFFSET
+        for oPlayer in self.playerList:
+            for cardIndex in range(0, Game.NCARDS):  # deal out cards to player and dealer
+                oCard = self.oDeck.getCard()
+                oPlayer.playerCardList.append(oCard)
+                oPlayer.playerScore += oCard.getValue()
 
-        for cardIndex in range(0, Game.NCARDS):  # deal out cards to player and dealer
-            oCard = self.oDeck.getCard()
-            self.playerCardList.append(oCard)
-            self.playerScore += oCard.getValue()
+                oCard.setLoc((oPlayer.cardXPositionsList[cardIndex], oPlayer.yPos))
 
-            aCard = self.oDeck.getCard()
-            self.dealerCardList.append(aCard)
-            self.dealerScore += aCard.getValue()
-
-            thisXPosition = self.cardXPositionsList[cardIndex]
-            oCard.setLoc((thisXPosition, Game.PLAYER_CARDS_TOP))
-            aCard.setLoc((thisXPosition, Game.DEALER_CARDS_TOP))
-
-
-        self.showCard(0,self.playerCardList)
-        self.showCard(1,self.playerCardList)
-        self.showCard(0, self.dealerCardList)
-        print(self.playerScore)
+        self.showCard(0, self.oPlayer1.playerCardList)
+        self.showCard(1, self.oPlayer1.playerCardList)
+        self.showCard(0, self.oPlayer2.playerCardList)
 
         self.messageText.setValue('Hit or stay?')
 
-    def getCardNameAndValue(self, index):
-        oCard = self.playerCardList[index]
+    def getCardNameAndValue(self, index, oPlayer):
+        oCard = oPlayer.playerCardList[index]
         theName = oCard.getName()
         theValue = oCard.getValue()
         return theName, theValue
@@ -75,61 +63,26 @@ class Game():
         oCard.reveal()
 
     def hit(self):
+
         oCard = self.oDeck.getCard()
         oCard.reveal()
 
-        self.playerCardList.append(oCard)
+        self.oPlayer1.playerCardList.append(oCard)
         self.cardXPositionsList.append(self.thisLeft)
         self.thisLeft = self.thisLeft + Game.CARD_OFFSET
 
         thisXPosition = self.cardXPositionsList[-1]
-        oCard.setLoc((thisXPosition, Game.PLAYER_CARDS_TOP))
-
-        self.playerScore += oCard.getValue()
-        print(self.playerScore)
-        if self.playerScore > 21:
+        oCard.setLoc((thisXPosition, self.oPlayer1.yPos))
+        self.oPlayer1.playerScore += oCard.getValue()
+        if self.oPlayer1.playerScore > 21:
             return True
         else:
             return False
 
-    # TODO: implement dealer turn, refactor hit and create stay method
-    def dealerTurn(self):
-        if self.dealerScore <= 16:
-            self.hit()
-        else
-            self.stay()
-
-    # def hitHigherOrLower(self, higherOrLower):
-    #     self.cardNumber += 1
-    #     self.showCard(self.cardNumber)
-    #     nextCardName, nextCardValue = self.getCardNameAndValue(self.cardNumber)
-    #
-    #     if higherOrLower == HIGHER:
-    #         if nextCardValue > self.currentCardValue:
-    #             self.messageText.setValue('Yes, the ' + nextCardName + ' was higher')
-    #             self.winnerSound.play()
-    #         else:
-    #             self.messageText.setValue('No, the ' + nextCardName + ' was not higher')
-    #             self.loserSound.play()
-    #     else: # user hit lower button
-    #         if nextCardValue < self.currentCardValue:
-    #             self.messageText.setValue('Yes, the ' + nextCardName + ' was lower')
-    #             self.winnerSound.play()
-    #         else:
-    #             self.messageText.setValue('No, the ' + nextCardName + ' was not lower')
-    #             self.loserSound.play()
-    #
-    #
-    #     self.currentCardValue = nextCardValue # set up for next card
-    #     done = (self.cardNumber == (Game.NCARDS - 1)) # did we reach last card
-    #     return done
-
     def draw(self):
         # Tell for each card to draw itself
-        for oCard in self.playerCardList:
-            oCard.draw()
-
-        for aCard in self.dealerCardList:
-            aCard.draw()
+        for oPlayer in self.playerList:
+            for oCard in oPlayer.playerCardList:
+                oCard.draw()
 
         self.messageText.draw()

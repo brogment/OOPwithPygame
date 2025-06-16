@@ -2,6 +2,7 @@ import pygwidgets
 import pyghelpers
 import pygame
 from Constants import *
+import sys
 
 class ScenePlay(pyghelpers.Scene):
     def __init__(self, window):
@@ -21,15 +22,22 @@ class ScenePlay(pyghelpers.Scene):
 
     def handleInputs(self, events, keyPressedList):
         for event in events:
+
+            if self.quitButton.handleEvent(event):
+                pygame.quit()
+                sys.exit()
+
             if self.hitButton.handleEvent(event):
                 bust = self.oGame.hit()
                 if bust:
                     self.stayButton.disable()
                     self.hitButton.disable()
+                    #self.goToScene(SCENE_RESULTS)
 
             if self.stayButton.handleEvent(event):
                 self.stayButton.disable()
                 self.hitButton.disable()
+               # self.goToScene(SCENE_RESULTS)
 
     def enter(self, data):
         self.oGame = data
