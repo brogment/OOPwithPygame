@@ -4,12 +4,13 @@ from pygame.locals import *
 import sys
 import random
 from Ball import *
+from BallMgr import *
+
 # 2 - Define constants
 BLACK = (0, 0, 0)
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
 FRAMES_PER_SECOND = 30
-N_BALLS = 3
 
 # 3 - Initialize the world
 pygame.init()
@@ -21,10 +22,8 @@ pygame.mixer.music.load('sound/background.mp3')
 pygame.mixer.music.play(-1, 0.0)
 
 # 5 - Initialize variables
-ballList = []
-for oBall in range(0, N_BALLS):
-    oBall = Ball(window,WINDOW_WIDTH, WINDOW_HEIGHT)
-    ballList.append(oBall)
+oBallMgr = BallMgr(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+oBallMgr.start(4, 1)
 
 # 6 - Loop forever
 while True:
@@ -37,15 +36,14 @@ while True:
             sys.exit()
 
     # 8 - Do any "per frame" actions
-    for oBall in ballList:
-        oBall.update()
+    oBallMgr.update()
 
     # 9 - Clear the window
     window.fill(BLACK)
 
     # 10 - Draw all window elements
-    for oBall in ballList:
-        oBall.draw()
+
+    oBallMgr.draw()
 
     # 11 - Update the window
     pygame.display.update()
