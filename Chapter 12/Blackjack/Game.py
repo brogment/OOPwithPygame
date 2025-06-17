@@ -9,22 +9,17 @@ from Player import *
 class Game():
     CARD_OFFSET = 70
     CARDS_LEFT = 300
-    # PLAYER_CARDS_TOP = 300
-    # DEALER_CARDS_TOP = 100
     NCARDS = 2
 
     def __init__(self, window):
         self.window = window
         self.oDeck = Deck(self.window,rankValueDict=Deck.blackjackDict)
-        self.messageText = pygwidgets.DisplayText(window, (50, 460),
-                                    '', width=900, justified='center',
-                                    fontSize=36, textColor=WHITE)
 
         self.loserSound = pygame.mixer.Sound("sounds/loser.wav")
         self.winnerSound = pygame.mixer.Sound("sounds/ding.wav")
         self.cardShuffleSound = pygame.mixer.Sound("sounds/cardShuffle.wav")
 
-        self.reset()  # start a round of the game
+        self.reset()
 
     def reset(self):  # this method is called when a new round starts
 
@@ -49,8 +44,7 @@ class Game():
         self.showCard(0, self.oPlayer1.playerCardList)
         self.showCard(1, self.oPlayer1.playerCardList)
         self.showCard(0, self.oPlayer2.playerCardList)
-
-        self.messageText.setValue('Hit or stay?')
+        #self.showCard(1, self.oPlayer2.playerCardList)
 
     def getCardNameAndValue(self, index, oPlayer):
         oCard = oPlayer.playerCardList[index]
@@ -63,21 +57,12 @@ class Game():
         oCard.reveal()
 
     def hit(self, playerID):
-
         oCard = self.oDeck.getCard()
         oCard.reveal()
-
         self.playerList[playerID].addCardtoHand(oCard)
-
-        if self.playerList[playerID].playerScore > 21:
-            return True
-        else:
-            return False
 
     def draw(self):
         # Tell for each card to draw itself
         for oPlayer in self.playerList:
             for oCard in oPlayer.playerCardList:
                 oCard.draw()
-
-        self.messageText.draw()

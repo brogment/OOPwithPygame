@@ -7,7 +7,7 @@ import sys
 class ScenePlay(pyghelpers.Scene):
     def __init__(self, window):
         self.window = window
-        self.background = pygwidgets.Image(window, (0, 0), 'images/background.png')
+        self.background = pygwidgets.Image(window, (0, 0), 'images/101814.jpg')
         self.newGameButton = pygwidgets.TextButton(window, (20, 530), 'New Game',
                                                    width=100, height=45)
         self.stayButton = pygwidgets.TextButton(window, (540, 520), 'Stay',
@@ -16,6 +16,9 @@ class ScenePlay(pyghelpers.Scene):
                                                width=120, height=55)
         self.quitButton = pygwidgets.TextButton(window, (880, 530), 'Quit',
                                                 width=100, height=45)
+
+        self.TIMER_LENGTH = 2
+        self.oTimer = pyghelpers.Timer(self.TIMER_LENGTH)
 
     def getSceneKey(self):
         return SCENE_PLAY
@@ -27,32 +30,43 @@ class ScenePlay(pyghelpers.Scene):
                 pygame.quit()
                 sys.exit()
 
+            if self.newGameButton.handleEvent(event):
+                self.oGame.reset()
+                self.stayButton.enable()
+                self.hitButton.enable()
+                self.oTimer.stop()
+
             if self.hitButton.handleEvent(event):
-                bust = self.oGame.hit(0)
-                if bust:
+                self.oGame.hit(0)
+                if self.oGame.playerList[0].playerScore > 21:
                     self.stayButton.disable()
                     self.hitButton.disable()
-                    #self.goToScene(SCENE_RESULTS)
+                    # starting timer, when it ends then the computer will
+                    # take action each frame in update()
+                    self.oTimer.start()
 
             if self.stayButton.handleEvent(event):
                 self.stayButton.disable()
                 self.hitButton.disable()
-               # self.goToScene(SCENE_RESULTS)
+                self.oTimer.start()
+
+    def update(self):
+        if self.oTimer.update():
+            if self.oGame.playerList[1].playerScore <= 16:
+                self.oTimer.start()
+                self.oGame.hit(1)
+            else:
+                self.goToScene(SCENE_RESULTS, self.oGame)
 
     def enter(self, data):
         self.oGame = data
         self.stayButton.enable()
         self.hitButton.enable()
-        # getting the game from the start scene
-        # needed so each round will pull from the same deck until it's depleted
-        # otherwise a fresh deck will be made for every round
 
     def draw(self):
-        self.window.fill(BACKGROUND_COLOR)
-
-        #     # Tell the game to draw itself
+        self.background.draw()
+        # Tell the game to draw itself
         self.oGame.draw()
-        #     # Draw remaining UI elements
 
         self.newGameButton.draw()
         self.hitButton.draw()

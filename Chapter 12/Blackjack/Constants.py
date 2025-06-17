@@ -1,6 +1,4 @@
 WHITE = (255,255,255)
-HIGHER = 'higher'
-LOWER = 'lower'
 
 # scene keys
 SCENE_START = 'start'
@@ -8,7 +6,6 @@ SCENE_PLAY = 'play'
 SCENE_RESULTS = 'results'
 
 BLACK = (0, 0, 0)
-BACKGROUND_COLOR = (6,64,43)
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 600
 FRAMES_PER_SECOND = 30
