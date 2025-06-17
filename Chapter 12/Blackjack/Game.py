@@ -62,19 +62,14 @@ class Game():
         oCard = cardList[index]
         oCard.reveal()
 
-    def hit(self):
+    def hit(self, playerID):
 
         oCard = self.oDeck.getCard()
         oCard.reveal()
 
-        self.oPlayer1.playerCardList.append(oCard)
-        self.cardXPositionsList.append(self.thisLeft)
-        self.thisLeft = self.thisLeft + Game.CARD_OFFSET
+        self.playerList[playerID].addCardtoHand(oCard)
 
-        thisXPosition = self.cardXPositionsList[-1]
-        oCard.setLoc((thisXPosition, self.oPlayer1.yPos))
-        self.oPlayer1.playerScore += oCard.getValue()
-        if self.oPlayer1.playerScore > 21:
+        if self.playerList[playerID].playerScore > 21:
             return True
         else:
             return False

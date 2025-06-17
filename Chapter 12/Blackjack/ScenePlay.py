@@ -28,7 +28,7 @@ class ScenePlay(pyghelpers.Scene):
                 sys.exit()
 
             if self.hitButton.handleEvent(event):
-                bust = self.oGame.hit()
+                bust = self.oGame.hit(0)
                 if bust:
                     self.stayButton.disable()
                     self.hitButton.disable()

@@ -1,3 +1,4 @@
+from Card import *
 
 class Player:
     CARD_OFFSET = 70
@@ -15,3 +16,11 @@ class Player:
         for cardNum in range(2):
             self.cardXPositionsList.append(self.currentXPos)
             self.currentXPos += Player.CARD_OFFSET
+
+    def addCardtoHand(self, oCard):
+        self.playerCardList.append(oCard)
+        self.cardXPositionsList.append(self.currentXPos)
+        self.currentXPos += Player.CARD_OFFSET
+        thisXPosition = self.cardXPositionsList[-1]
+        oCard.setLoc((thisXPosition, self.yPos))
+        self.playerScore += oCard.getValue()
