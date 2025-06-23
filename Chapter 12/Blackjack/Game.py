@@ -33,6 +33,8 @@ class Game():
         self.playerList.append(self.oPlayer1)
         self.playerList.append(self.oPlayer2)
 
+
+        # problem is I should do using addCardToHand method for dealing out initial cards
         for oPlayer in self.playerList:
             for cardIndex in range(0, Game.NCARDS):  # deal out cards to player and dealer
                 oCard = self.oDeck.getCard()
