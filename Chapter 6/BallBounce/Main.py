@@ -8,8 +8,8 @@ from BallMgr import *
 
 # 2 - Define constants
 BLACK = (0, 0, 0)
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 600
+WINDOW_HEIGHT = 480
 FRAMES_PER_SECOND = 30
 
 # 3 - Initialize the world
@@ -20,10 +20,11 @@ clock = pygame.time.Clock()
 # 4 - Load assets: image(s), sound(s),  etc.
 pygame.mixer.music.load('sound/background.mp3')
 pygame.mixer.music.play(-1, 0.0)
+targetImage = pygame.image.load('images/target.jpg')
 
 # 5 - Initialize variables
 oBallMgr = BallMgr(window, WINDOW_WIDTH, WINDOW_HEIGHT)
-oBallMgr.start(4, 1)
+oBallMgr.start(3, 1)
 
 # 6 - Loop forever
 while True:

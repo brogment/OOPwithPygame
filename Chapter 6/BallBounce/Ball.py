@@ -32,18 +32,19 @@ class Ball():
     def update(self, ballList):
 
         # checking to see if this ball is colliding with any other balls
-        # for oBall in ballList:
-        #    if self.ballRect.colliderect(oBall.ballRect):
-        #         print(self.ballRect)
-        #         self.xSpeed = -self.xSpeed
-        #         self.ySpeed = -self.ySpeed
-        #         self.bounceSound.play()
+        for oBall in ballList:
+            if oBall == self:
+                continue
+            if self.ballRect.colliderect(oBall.getRect()):
+                print(self.ballRect)
+                self.xSpeed = -self.xSpeed
+                self.ySpeed = -self.ySpeed
+                self.bounceSound.play()
 
         # Check for hitting a wall. If so, change that direction.
         if (self.x < 0) or (self.x >= self.maxWidth):
             self.xSpeed = -self.xSpeed
             self.bounceSound.play()
-            print(self.ballRect)
 
         if (self.y < 0) or (self.y >= self.maxHeight):
             self.ySpeed = -self.ySpeed
@@ -54,8 +55,13 @@ class Ball():
         self.x = self.x + self.xSpeed
         self.y = self.y + self.ySpeed
 
+        # could the problem be that I'm making the new rect at the bottom and not the top,
+        # should rect be created before I check for collusion? should collusion and updating position
+        # be put into separate functions?
         self.ballRect = pygame.Rect(self.x, self.y, self.width, self.height)
 
     def draw(self):
         self.window.blit(self.image, (self.x, self.y))
 
+    def getRect(self):
+        return self.ballRect
