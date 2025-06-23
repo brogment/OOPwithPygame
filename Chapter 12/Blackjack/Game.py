@@ -66,3 +66,6 @@ class Game():
         for oPlayer in self.playerList:
             for oCard in oPlayer.playerCardList:
                 oCard.draw()
+
+    def getPlayerScore(self, playerID):
+        return self.playerList[playerID].getPlayerScore()

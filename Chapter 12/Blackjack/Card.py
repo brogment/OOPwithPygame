@@ -35,6 +35,9 @@ class Card():
     def getValue(self):
         return self.value
 
+    def setValue(self, newValue):
+        self.value = newValue
+
     def setLoc(self, loc):
         self.images.setLoc(loc)
 

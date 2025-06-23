@@ -38,7 +38,8 @@ class ScenePlay(pyghelpers.Scene):
 
             if self.hitButton.handleEvent(event):
                 self.oGame.hit(0)
-                if self.oGame.playerList[0].playerScore > 21:
+                print(self.oGame.getPlayerScore(0))
+                if self.oGame.getPlayerScore(0) > 21:
                     self.stayButton.disable()
                     self.hitButton.disable()
                     # starting timer, when it ends then the computer will
@@ -46,16 +47,19 @@ class ScenePlay(pyghelpers.Scene):
                     self.oTimer.start()
 
             if self.stayButton.handleEvent(event):
+                print(self.oGame.getPlayerScore(0))
                 self.stayButton.disable()
                 self.hitButton.disable()
                 self.oTimer.start()
 
     def update(self):
         if self.oTimer.update():
-            if self.oGame.playerList[1].playerScore <= 16:
+            if self.oGame.getPlayerScore(1) <= 16:
                 self.oTimer.start()
                 self.oGame.hit(1)
+                print(self.oGame.getPlayerScore(1))
             else:
+                print(self.oGame.getPlayerScore(1))
                 self.goToScene(SCENE_RESULTS, self.oGame)
 
     def enter(self, data):
