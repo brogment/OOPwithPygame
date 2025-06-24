@@ -63,6 +63,19 @@ class Game():
             for oCard in oPlayer.playerCardList:
                 oCard.draw()
 
+        # draw the rest of the deck off to side to later add animation
+        # of it moving to player or dealer side of table?
+        # would need to set loc for every card in deck, making it offset just
+        # 1 or 2 pixels each time to give illusion of a deck
+        x=200
+        y=200
+
+        for oCard in self.oDeck.playingDeckList:
+            oCard.setLoc((x,y))
+            x+=.7
+            y+=.7
+            oCard.draw()
+
     def getPlayerScore(self, playerID):
         return self.playerList[playerID].getPlayerScore()
 
@@ -88,3 +101,6 @@ class Game():
     def reveal(self, playerID, cardIndex):
         oCard = self.playerList[playerID].playerCardList[cardIndex]
         oCard.reveal()
+
+    def getStats(self):
+        return self.roundsWon, self.roundsLost, self.roundsTied

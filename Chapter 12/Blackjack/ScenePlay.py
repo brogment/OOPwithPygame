@@ -17,8 +17,27 @@ class ScenePlay(pyghelpers.Scene):
         self.quitButton = pygwidgets.TextButton(window, (880, 530), 'Quit',
                                                 width=100, height=45)
 
-        self.resultsButton = pygwidgets.TextButton(window, (750, 530), 'Results',
+        self.statsButton = pygwidgets.TextButton(window, (750, 530), 'Stats',
                                                 width=100, height=45)
+
+
+        self.roundsWonLabel = pygwidgets.DisplayText(window, (750,300),'Rounds Won:'
+                                                ,textColor=pygwidgets.PYGWIDGETS_WHITE)
+        self.roundsLostLabel = pygwidgets.DisplayText(window, (750, 320), 'Rounds Lost:'
+                                                , textColor=pygwidgets.PYGWIDGETS_WHITE)
+        self.roundsTiedLabel = pygwidgets.DisplayText(window, (750, 340), 'Rounds Tied:'
+                                                , textColor=pygwidgets.PYGWIDGETS_WHITE)
+
+        self.roundsWonCounter = pygwidgets.DisplayText(window, (850, 300), '0'
+                                                , textColor=pygwidgets.PYGWIDGETS_WHITE)
+        self.roundsLostCounter = pygwidgets.DisplayText(window, (850, 320), '0'
+                                                , textColor=pygwidgets.PYGWIDGETS_WHITE)
+        self.roundsTiedCounter = pygwidgets.DisplayText(window, (850, 340), '0'
+                                                , textColor=pygwidgets.PYGWIDGETS_WHITE)
+
+
+
+
 
         self.TIMER_LENGTH = 2
         self.oTimer = pyghelpers.Timer(self.TIMER_LENGTH)
@@ -37,7 +56,7 @@ class ScenePlay(pyghelpers.Scene):
                 pygame.quit()
                 sys.exit()
 
-            if self.resultsButton.handleEvent(event):
+            if self.statsButton.handleEvent(event):
                 self.goToScene(SCENE_RESULTS, self.oGame)
 
             if self.newGameButton.handleEvent(event):
@@ -75,7 +94,16 @@ class ScenePlay(pyghelpers.Scene):
                 self.oTimer.start()
                 print(f"dealer score: {self.oGame.getPlayerScore(1)}")
             else:
+                # round is over
                 self.flipped = False
+
+                self.oGame.calcResults()
+
+                wins, loses, ties = self.oGame.getStats()
+                self.roundsWonCounter.setValue(wins)
+                self.roundsLostCounter.setValue(loses)
+                self.roundsTiedCounter.setValue(ties)
+
                 self.oGame.reset()
                 self.stayButton.enable()
                 self.hitButton.enable()
@@ -95,4 +123,11 @@ class ScenePlay(pyghelpers.Scene):
         self.hitButton.draw()
         self.stayButton.draw()
         self.quitButton.draw()
-        self.resultsButton.draw()
+        self.statsButton.draw()
+
+        self.roundsWonLabel.draw()
+        self.roundsLostLabel.draw()
+        self.roundsTiedLabel.draw()
+        self.roundsWonCounter.draw()
+        self.roundsLostCounter.draw()
+        self.roundsTiedCounter.draw()

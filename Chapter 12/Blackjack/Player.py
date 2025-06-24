@@ -36,7 +36,7 @@ class Player:
             aceIndex = self.acesInHand[-1]
             self.playerCardList[aceIndex].setValue(1)
             self.acesInHand.pop()
-            self.playerScore -= 10 # hacky way to avoid having to sum up the deck again
+            self.playerScore -= 10 # hacky way to avoid having to sum up the deck
         return self.playerScore
 
 
