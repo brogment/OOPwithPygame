@@ -19,6 +19,10 @@ class Game():
         self.winnerSound = pygame.mixer.Sound("sounds/ding.wav")
         self.cardShuffleSound = pygame.mixer.Sound("sounds/cardShuffle.wav")
 
+        self.roundsWon = 0
+        self.roundsLost = 0
+        self.roundsTied = 0
+
         self.reset()
 
     def reset(self):  # this method is called when a new round starts
@@ -33,30 +37,20 @@ class Game():
         self.playerList.append(self.oPlayer1)
         self.playerList.append(self.oPlayer2)
 
-
-        # problem is I should do using addCardToHand method for dealing out initial cards
         for oPlayer in self.playerList:
-            for cardIndex in range(0, Game.NCARDS):  # deal out cards to player and dealer
+            for cardNum in range(0, Game.NCARDS):  # deal out cards to player and dealer
                 oCard = self.oDeck.getCard()
-                oPlayer.playerCardList.append(oCard)
-                oPlayer.playerScore += oCard.getValue()
+                oPlayer.addCardtoHand(oCard)
 
-                oCard.setLoc((oPlayer.cardXPositionsList[cardIndex], oPlayer.yPos))
-
-        self.showCard(0, self.oPlayer1.playerCardList)
-        self.showCard(1, self.oPlayer1.playerCardList)
-        self.showCard(0, self.oPlayer2.playerCardList)
-        #self.showCard(1, self.oPlayer2.playerCardList)
+        self.reveal(0, 0)
+        self.reveal(0, 1)
+        self.reveal(1, 0)
 
     def getCardNameAndValue(self, index, oPlayer):
         oCard = oPlayer.playerCardList[index]
         theName = oCard.getName()
         theValue = oCard.getValue()
         return theName, theValue
-
-    def showCard(self, index, cardList):
-        oCard = cardList[index]
-        oCard.reveal()
 
     def hit(self, playerID):
         oCard = self.oDeck.getCard()
@@ -71,3 +65,26 @@ class Game():
 
     def getPlayerScore(self, playerID):
         return self.playerList[playerID].getPlayerScore()
+
+    def calcResults(self):
+        pScore = self.getPlayerScore(0)
+        dScore = self.getPlayerScore(1)
+
+        if pScore > 21 and dScore <= 21:
+            self.roundsLost += 1
+        elif pScore <= 21 and dScore > 21:
+            self.roundsWon += 1
+        elif pScore > 21 and dScore > 21:
+            self.roundsTied += 1
+        elif pScore == dScore:
+            self.roundsTied += 1
+        elif pScore > dScore:
+            self.roundsWon += 1
+        elif pScore < dScore:
+            self.roundsLost += 1
+        else:
+            print("Something strange happened")
+
+    def reveal(self, playerID, cardIndex):
+        oCard = self.playerList[playerID].playerCardList[cardIndex]
+        oCard.reveal()

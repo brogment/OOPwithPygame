@@ -2,7 +2,7 @@ from Card import *
 
 class Player:
     CARD_OFFSET = 70
-    CARDS_LEFT = 300
+    CARDS_LEFT = 200
 
     def __init__(self, yPos):
 

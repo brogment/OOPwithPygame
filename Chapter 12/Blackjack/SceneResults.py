@@ -14,6 +14,12 @@ class SceneResults(pyghelpers.Scene):
         self.quitButton = pygwidgets.TextButton(window, (880, 530), 'Quit',
                                                 width=100, height=45)
 
+        self.resultsText = pygwidgets.DisplayText(window, (300,300), 'Play Again?',
+                                                  fontSize=120, textColor=pygwidgets.PYGWIDGETS_WHITE)
+        self.roundsWon = pygwidgets.DisplayText(window, (150,400),
+                                                f'Rounds Won:\tRounds Lost:\tRounds Tied:',
+                                                fontSize=44,textColor=pygwidgets.PYGWIDGETS_WHITE)
+
     def getSceneKey(self):
         return SCENE_RESULTS
 
@@ -30,6 +36,8 @@ class SceneResults(pyghelpers.Scene):
         self.background.draw()
         self.newGameButton.draw()
         self.quitButton.draw()
+        self.resultsText.draw()
+        self.roundsWon.draw()
 
     def enter(self, data):
         self.oGame = data
