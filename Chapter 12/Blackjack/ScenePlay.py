@@ -61,6 +61,13 @@ class ScenePlay(pyghelpers.Scene):
 
             if self.newGameButton.handleEvent(event):
                 self.oGame.reset()
+
+                self.oGame.newGameStatReset()
+                wins, loses, ties = self.oGame.getStats()
+                self.roundsWonCounter.setValue(wins)
+                self.roundsLostCounter.setValue(loses)
+                self.roundsTiedCounter.setValue(ties)
+
                 self.stayButton.enable()
                 self.hitButton.enable()
                 self.oTimer.stop()

@@ -104,3 +104,6 @@ class Game():
 
     def getStats(self):
         return self.roundsWon, self.roundsLost, self.roundsTied
+
+    def newGameStatReset(self):
+        self.roundsWon, self.roundsLost, self.roundsTied = 0,0,0
